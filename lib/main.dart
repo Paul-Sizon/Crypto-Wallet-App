@@ -1,43 +1,50 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'wallet_provider.dart';
+import 'pages/login_page.dart';
+import 'providers/wallet_provider.dart';
+import 'utils/routes.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider<WalletProvider>(
-    create: (context) => WalletProvider(),
-    child: const MainApp(),
-  ));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    print('Error loading .env file: $e');
+  }
+
+  // Initialize WalletProvider
+  WalletProvider walletProvider = WalletProvider();
+
+  try {
+    await walletProvider.loadPrivateKey();
+    print('Private key loaded successfully');
+  } catch (e) {
+    print('Error loading private key: $e');
+  }
+
+  runApp(
+    ChangeNotifierProvider<WalletProvider>.value(
+      value: walletProvider,
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final walletProvider = Provider.of<WalletProvider>(context);
-
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-                onPressed: () async {
-                  final mnemonic = walletProvider.generateMnemonic();
-                  final privateKey =
-                      await walletProvider.getPrivateKey(mnemonic);
-                  final publicKey =
-                      await walletProvider.getPublicKey(privateKey);
-                  print("mnemonic: $mnemonic");
-                  print("privateKey: $privateKey");
-                  print("publicKey: $publicKey");
-                },
-                child: Text("Generate Mnemonic")),
-          ],
-        )),
-      ),
+      initialRoute: MyRoutes.loginRoute,
+      routes: {
+        MyRoutes.loginRoute: (context) => const LoginPage(),
+      },
     );
   }
 }
