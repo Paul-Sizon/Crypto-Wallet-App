@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/wallet_provider.dart';
 import '../pages/create_or_import.dart';
@@ -85,6 +86,12 @@ class _WalletPageState extends State<WalletPage> {
                     fontSize: 20.0,
                   ),
                   textAlign: TextAlign.center,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showQrCodeDialog(context, walletAddress);
+                  },
+                  child: Text('Show QR Code'),
                 ),
                 const SizedBox(height: 32.0),
                 const Text(
@@ -226,6 +233,28 @@ class _WalletPageState extends State<WalletPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void showQrCodeDialog(BuildContext context, String walletAddress) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: 200, // Fixed width
+            height: 200, // Fixed height
+            child: Center(
+              child: QrImageView(
+                data: walletAddress,
+                version: QrVersions.auto,
+                size: 180,
+                gapless: false,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
