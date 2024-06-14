@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/get_nfts.dart';
+
 class NFTListPage extends StatefulWidget {
   final String address;
   final String chain;
@@ -26,19 +28,10 @@ class _NFTListPageState extends State<NFTListPage> {
   }
 
   Future<void> _loadNFTList() async {
-    final response = await http.get(
-        Uri.parse(
-            'http://192.168.100.47:5002/get_user_nfts?address=${widget.address}&chain=${widget.chain}'),
-        headers: {'Content-Type': 'application/json'});
-
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      setState(() {
-        _nftList = jsonData['result'];
-      });
-    } else {
-      throw Exception('Failed to load NFT list');
-    }
+    final response = await getUserNFTs(widget.address, widget.chain);
+    setState(() {
+      _nftList = response;
+    });
   }
 
   @override
