@@ -1,3 +1,3 @@
-# crypto_wallet
+# Non-custodial Crypto wallet
 
-A new Flutter project.
+Only Sepolia ETH for now
