@@ -1,3 +1,3 @@
-# Non-custodial Crypto wallet
+# Self-custodial Crypto wallet
 
 Only Sepolia ETH for now

@@ -104,7 +104,7 @@ class _WalletPageState extends State<WalletPage> {
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  balance,
+                  balance.length > 6 ? balance.substring(0, 6) : balance,
                   style: const TextStyle(
                     fontSize: 20.0,
                   ),
