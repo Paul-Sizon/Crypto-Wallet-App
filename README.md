@@ -1,8 +1,5 @@
 # Self-custodial Crypto wallet
 
-Only Sepolia ETH for now
+<img src="https://github.com/Paul-Sizon/Crypto-Wallet-App/blob/main/screenshot.png" height="400"/>
 
-Next steps:
-- design updates
-- saving key in google Drive
-- adding more chains
+Only Sepolia ETH for now
